@@ -1,0 +1,77 @@
+	{% extends 'rango/base.html' %}
+	{% load static %}
+<title>资源共享平台 - {% block title %}添加资源{% endblock %}</title>
+	{% block title_block %}	添加资源	{% endblock %}
+	
+	{% block body_block %}
+        <div>
+		{% if category %}
+		
+        <h1>新增一个内容到:&nbsp; &nbsp; &nbsp; {{category.name}}</h1>
+		<br /><br />
+
+        <form role="form" id="page_form" method="post" action="{% url 'add_page' category_name_slug=category.slug %}">
+
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+				<br />
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+                {{ field.errors }}				
+                {{ field.help_text }}				 
+                {{ field }}
+				<br /><br /><br />
+            {% endfor %}
+			<br /><br />
+            <input type="submit" name="submit" value="添加" />
+        </form>
+		
+		{% else %}
+			指定的目录并不存在！
+		{% endif%}
+		  
+		  
+		  
+		</div>	
+      
+	{% endblock %}
+
+	<!-- Pre chapter 8>
+	<!DOCTYPE html>
+	<html>
+	    <head>
+	        <title>Rango - Add Page</title>
+	    </head>
+
+	    <body>
+{#			{% if category %}#}
+{#			#}
+{#	        <h1>Add a Page to {{category.name}}</h1>#}
+{##}
+{#	        <form id="page_form" method="post" action="/rango/category/{{ category.slug }}/add_page/">#}
+{##}
+{#	            {% csrf_token %}#}
+{#	            {% for hidden in form.hidden_fields %}#}
+{#	                {{ hidden }}#}
+{#	            {% endfor %}#}
+{##}
+{#	            {% for field in form.visible_fields %}#}
+{#	                {{ field.errors }}#}
+{#	                {{ field.help_text }}#}
+{#	                {{ field }}#}
+{#	            {% endfor %}#}
+{##}
+{#	            <input type="submit" name="submit" value="Add Page" />#}
+{#	        </form>#}
+{#			#}
+{#			{% else %}#}
+{#				The specified category does not exist!#}
+{#			{% endif%}#}
+{#			#}
+{#	    </body>#}
+{##}
+{#	</html>#}
+		
+		-->

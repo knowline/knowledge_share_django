@@ -1,0 +1,210 @@
+{% load static %}
+{% load rango_template_tags %}
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+	<meta name="generator" content="Hugo 0.108.0">
+	<title>{% block title_block %}资源共享平台{% endblock %}</title>
+	<!-- 仅使用一个来源的 Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+	<!-- Favicons -->
+
+	<link rel="icon" href="{% static 'images/favicon.ico' %}">
+	<meta name="theme-color" content="#712cf9">
+
+	<!-- Custom styles for this template -->
+	<link href="https://getbootstrap.com/docs/5.3/dashboard.css" rel="stylesheet">
+
+	<!-- 在头部加载 jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+</head>
+<body>
+
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+	<a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="{% url 'index' %}">平台主页</a>
+	<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+	        data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+	        aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="navbar-nav">
+		<div class="nav-item text-nowrap" style="color:white;align-content: center">
+			<ul>
+				{% if user.is_authenticated %}
+					<!-- Show these links when the user is logged in -->
+					<p class="lead" style="color:white">欢迎您，本站用户：{{ user.username }}！
+						<a style="color:white" href="{% url 'auth_logout' %}?next={% url 'index' %}">登出</a></p>
+				{% else %}
+					<!-- Show these links when the user is NOT logged in -->
+					<p class="lead" style="color:white;align-content: center">欢迎您，访客！
+						<a style="color:white" href="{% url 'registration_register' %}">注册</a>
+						<a style="color:white" href="{% url 'auth_login' %}">登入</a></p>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</header>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+			<div class="position-sticky pt-3 sidebar-sticky">
+
+				 
+	 {% block sidebar_block %}
+    <span>内容目录</span>
+    {% if catpage %}
+   <ul class="list-group"  >
+        {% for category in catpage %}
+       <li class="list-group-item d-flex justify-content-between align-items-center">
+             <a href="{% url 'show_category' category.slug %}">{{ category.name }}</a>
+             <span class="badge badge-primary badge-pill">{{ category.page_count }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <strong>暂时没有目录.</strong>
+    {% endif %}
+
+
+{% endblock %}
+	 {% block split_pages_block %}
+    <!-- 分页控件 -->
+    <div class="pagination">
+        {% if catpage.has_previous %}
+            <a href="?page=1"> &nbsp;&nbsp;|<<&nbsp;&nbsp;</a>
+            <a href="?page={{ catpage.previous_page_number }}"> <<&nbsp;&nbsp;</a>
+        {% endif %}
+        
+        {% for num in catpage.paginator.page_range %}
+            {% if catpage.number == num %}
+                <strong>&nbsp;&nbsp;{{ num }}&nbsp;&nbsp;</strong>
+            {% else %}
+                <a href="?page={{ num }}">&nbsp;&nbsp;{{ num }}&nbsp;&nbsp;</a>
+            {% endif %}
+        {% endfor %}
+        
+        {% if catpage.has_next %}
+            <a href="?page={{ catpage.next_page_number }}"> &nbsp;&nbsp;&nbsp;&nbsp;>>&nbsp;&nbsp; </a>
+            <a href="?page={{ catpage.paginator.num_pages }}">&nbsp;&nbsp;>>|</a>
+        {% endif %}
+    </div>
+			{% endblock %}
+			
+
+				<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
+					<span>操作链接</span>
+				</h6>
+				<ul class="nav flex-column mb-2">
+					{% if user.is_authenticated %}
+						<li class="nav-item">
+							<a class="nav-link" href="{% url 'add_category' %}">
+								<span data-feather="file-text" class="align-text-bottom"></span>
+								添加目录
+							</a>
+						</li>
+
+						<!-- Show these links when the user is logged in -->
+						<li class="nav-item">
+							<a class="nav-link" href="{% url 'restricted' %}">
+								<span data-feather="file-text" class="align-text-bottom"></span>
+								登录提示</a>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link" href="{% url 'auth_password_change' %}">
+								<span data-feather="file-text" class="align-text-bottom"></span>
+								修改密码</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{% url 'about' %}">
+								<span data-feather="file-text" class="align-text-bottom"></span>
+								关于平台</a>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="#">回到顶部</a></li>
+					{% else %}
+						<li class="nav-item">
+							<a class="nav-link" href="{% url 'about' %}">
+								<span data-feather="file-text" class="align-text-bottom"></span>
+								关于平台</a>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="#">回到顶部</a></li>
+					{% endif %}
+				</ul>
+			</div>
+		</nav>
+		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+			<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+				<!--        <h1 class="h2">Dashboard</h1>  -->
+				{% block body_block %}
+				{% endblock %}
+			</div>
+		</main>
+	</div>
+</div>
+<footer style="display: flex; align-items: center; justify-content: space-between; padding: 20px;">
+	<p style="margin: 0;">&copy; 2023 版权：山东交通学院 蒋同学 ｜ 目前访问量： {{ visits }}次</p>
+	<img src="{% static 'images/rango.jpg' %}" alt="Picture" style="width: 100px; height: auto;">
+</footer>
+
+<script src="https://getbootstrap.com/docs/5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<!-- 包含 Feather 图标的 JavaScript 文件 -->
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+        crossorigin="anonymous"></script>
+<script src="https://getbootstrap.com/dashboard.js"></script>
+
+<!-- 确保 Ajax 脚本正确 -->
+{% block javascript %}
+
+
+	{#    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>#}
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			var likeButton = document.getElementById('likes');
+			likeButton.addEventListener('click', function () {
+				var catid = this.getAttribute('data-catid');
+				$.ajax({
+					type: "GET",
+					url: "/rango/like/" + catid + "/",
+					dataType: "json",
+					success: function (response) {
+						$('#like_count').text(response.likes + " 人喜欢该目录");
+					},
+					error: function (xhr, status, error) {
+						console.error("Error: " + status + " " + error);
+					}
+				});
+			});
+		});
+	</script>
+	
+	<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+    const list = document.querySelector('.list-group');
+    const items = list.querySelectorAll('li');
+    const itemsNeeded = 10 - items.length;
+    for (let i = 0; i < itemsNeeded; i++) {
+        const li = document.createElement('li');
+        li.classList.add('list-group-item');
+        li.innerHTML = "&nbsp;";  // 添加空白占位符
+        list.appendChild(li);
+    }
+});
+</script>
+
+
+{% endblock %}
+</body>
+</html>

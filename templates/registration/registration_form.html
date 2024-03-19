@@ -1,0 +1,49 @@
+{% extends 'rango/base.html' %}
+{#{% load staticfiles  %}#}
+{% load static %}
+<!-- 引入 Bootstrap 的 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<title> {% block title %}资源共享平台 - 注册页面{% endblock %}</title>
+
+{% block body_block %}
+<div class="container">
+    <h2 class="mt-5 mb-4">注册页面</h2>
+    <div class="row">
+        <div class="col-md-6">
+      {% if registered %}
+       <strong> 感谢您的注册 ！</strong>
+      <a href="{% url 'index' %}" class="alert-link">返回主页</a>
+                </div>
+            {% else%}
+          
+{#            <form class="mb-5" role="form" id="user_form" method="post"   enctype="multipart/form-data">#}
+            <form class="mb-5" role="form" id="user_form" method="post" action="{% url 'registration_complete' %}" enctype="multipart/form-data">
+                    
+             
+{#            <form id="user_form" method="post" action="{% url 'register_profile' %}"#}
+{#             <form class="form-signin" role="form" id="user_form" method="post" action="{% url 'registration_complete' %}"#}
+{#                  enctype="multipart/form-data">#}
+          <!-- enctype属性是因为如果用户上传了一个图片，则表单的返回可能包括二进制数据并且相当大。
+                返回结果因此不得不打成多个部分以传回到服务器。用了这个属性，告诉HTTP客户端（网页浏览器）来相应的打包和发送数据。
+               否则，服务器不会接收到来自用户的所有数据。
+               form元素的enctype属性是当用户上传文件到表单时的一个必须有的属性，必须设置为multipart/form-data。-->
+
+            {%csrf_token%}
+                <!-- 如果没有csrf标记在form元素中，django跨网址伪造保护中间件层会拒绝接受表单的内容，返回一个错误！-->
+
+            <!--显示每个表-->
+                 
+            {{user_form.as_p}}
+            {{profile_form.as_p}}
+
+{#            <input type="submit" name="submit" value="提交"/>#}
+               <button type="submit" class="btn btn-primary">提交</button>
+      </form>
+      {% endif %}
+    </div>
+    </div>
+</div>
+{% endblock %}
+

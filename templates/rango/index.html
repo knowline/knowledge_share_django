@@ -1,0 +1,73 @@
+ 
+ {% extends 'rango/base.html' %}
+{% load static %}
+{% block title_block %} 主页 {% endblock %} 
+
+{% block body_block %}
+	          
+<div class="container mt-4">
+    <div class="row">
+         <div class="col-md-3"  >
+                    <h4>链接资源最多的目录</h4>
+                    <p>
+                        {% if categories %}
+                        <ul class="list-group">
+                            {% for category in categories %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                 <a href="{% url 'show_category' category.slug %}">{{ category.name }}</a>
+                                 <span class="badge badge-primary badge-pill"></span>{{ category.page_count }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <strong>暂时没有目录.</strong>
+                        {% endif %}
+                    </p>
+                </div>
+<!-- 浏览人数最多的文章 -->
+                <div class="col-md-6"  >
+                    <h4>浏览最多次数的页面</h4>
+                    <p>
+                        {% if pages %}
+                        <ul class="list-group">
+                            {% for page in pages %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'goto' %}?page_id={{page.id}}"\>{{ page.title }}</a>
+{#	                            <a href="{{ page.url }}">{{ page.title }}</a>#}
+                    
+                      <span class="badge badge-primary badge-pill"></span>{{ page.views }}
+                </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <strong>目前暂时没有页面。</strong>
+                        {% endif %}
+                    </p>
+                </div>
+            
+    <!-- 喜欢人数最多的目录 -->
+        <div class="col-md-3"  >
+            <h4>喜欢人数最多的目录</h4>
+          <p>
+            {% if categories_likes %}
+            <ul class="list-group">
+                {% for category in categories_likes %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'show_category' category.slug %}">{{ category.name }}</a>
+                    <span class="badge badge-primary badge-pill"></span>{{ category.likes }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <strong>暂时没有目录。</strong>
+            {% endif %}
+        </p>
+        </div>
+            
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
+

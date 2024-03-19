@@ -1,0 +1,30 @@
+	{% extends 'rango/base.html' %}
+{#{% load bootstrap_toolkit %}#}
+	{% load static %}	
+	<title> {% block title %}资源共享平台 - 添加目录{% endblock %}</title>
+{#	{% block title_block %}#}
+{#		添加目录#}
+{#	{% endblock %}#}
+{#	#}
+	{% block body_block %}
+		<div>
+			<h1>添加目录</h1>
+			<form  id="category_form" method="post" action="{% url 'add_category' %}">
+				{% csrf_token %}
+				{% for hidden in form.hidden_fields %}
+	                {{ hidden }}
+	            {% endfor %}
+<br/>
+	            {% for field in form.visible_fields %}
+	                {{ field.errors }}
+	                {{ field.help_text }}<br/>
+	                {{ field }}
+					<br/>
+	            {% endfor %}
+				<br/><br/>
+
+				<button class="btn btn-primary" type="submit" name="submit">新建目录</button>
+	        </form>
+		</div>	
+        
+	{% endblock %}

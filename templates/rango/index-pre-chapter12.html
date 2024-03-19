@@ -1,0 +1,43 @@
+	{% extends 'rango/base.html' %}
+	{% load static %}
+	{% block title_block %}
+		Index
+	{% endblock %}
+	{% block body_block %}
+		<div>
+        <h1>在信息时代，知道知识在哪里比知道知识是什么更重要...</h1>       
+			欢迎来到资源共享平台！ 
+		</div>	
+		<div>
+			<div>
+				<h3>链接资源最多的目录</h3>	
+			</div>
+         	{% if categories %}
+             <ul>
+                 {% for category in categories %}
+                 	<li><a href="{% url 'show_category' category.slug %}">{{ category.name }}</a></li>
+                 {% endfor %}
+             </ul>
+        {% else %}
+             <strong>There are no categories present.</strong>
+        {% endif %}
+			</div>
+			
+				<div>
+					<div>
+						<h3>浏览最多次数的页面</h3>	
+					</div>
+	         	   {% if pages %}
+	             	<ul>
+	                 {% for page in pages %}
+	                 <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+	                 {% endfor %}
+	             	</ul>
+	        		{% else %}
+	             <strong>There are no categories present.</strong>
+	       	  		{% endif %}
+			</div>
+			
+        <img src="{% static "images/rango.jpg" %}" alt="Picture of Rango" /> 
+		
+	{% endblock %}
